@@ -7,16 +7,17 @@ html{
 *{
     box-sizing: border-box;
 }
-.moviesWrapper{
+.contentWrapper{
     width: 85%;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    margin-top: 100px;
 }
-.movieCard{
-    width: 23vw;
+.movieCard,.actorCard{
+    width: 500px;
     background: #4c21b9;
     display: flex;
     align-items: flex-start;
@@ -30,7 +31,7 @@ html{
     position: relative;
 }
 .movieCardAlt{
-    width: 90vw;
+    width: 80vw;
     height: auto;
 }
 .movieDetailed{
@@ -47,22 +48,21 @@ html{
     width: 73%;
     padding: 15px;
 }
-.movieDetailedText{
+.movieDetailedText,.actorDetailedText{
     padding: 10px;
     font-size: 25px;    
     margin-top: 30px;
     text-align: left;
     font-weight: 300;
 }
-.movieDetailedTitle{
+.movieDetailedTitle,.actorMainFilmsWrapperTitle{
     text-align: center;
     margin-bottom: 20px;
     font-size: 30px;
 }
-.movieBrief{  
+.movieBrief,.actorBrief{  
     width: 100%;  
-    height: 100%;    
-    background: #4c21b9;
+    height: 100%;   
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -109,7 +109,7 @@ html{
     align-items: center;
     font-weight: 700;
 }
-.movieDescr{
+.movieDescr,.actorDescr{
     width: 100%;
     display: flex;
     align-items: center;
@@ -172,12 +172,12 @@ html{
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.movieRecommendationsWrapper{
+.movieRecommendationsWrapper,.actorDetailedMainFilmsWrapper{
     display: flex;
     width: 100%;
     height: 40%;
     justify-content: space-evenly;
-    align-items: self-end;
+    align-items: center;
     font-weight: 700;
     margin-top: 10px;
 }
@@ -189,6 +189,11 @@ html{
     justify-content: center;
     height: 100%;
     text-align: center;
+    cursor: pointer;
+    padding: 10px;
+}
+.movieRecommendationsItem:hover{
+    background: #3e16a4
 }
 .movieRecommendationsImg{
     width: 9rem;
@@ -201,25 +206,46 @@ html{
     font-size: 30px;
 }
 form{
+    width: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    /* display: none; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    text-align: center;
+    color:white;
+    background: #4c21b9;
+    padding: 5px;
 }
-input[name="search"],.submit{
+.radios{
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+    align-items: self-start;
+}
+.radioButton{
+    margin-top: 10px;
+}
+.searchText{
+    font-size: 30px;    
+}
+.search,.submit{
     height: 70px;
-    width: 300px;
     border: 1px solid black ;
     box-shadow: 3px 3px black;
     font-size: 20px;
     text-align: center;
 }
-input[name="search"]{
-    width: 500px;
+.search{
+    height: 50px;
+    width: 50%;
+    position: relative;
 }
 .submit{
-    width: 100px;
+    width: 20%;
     height: 50px;
     font-size: 20px;
     margin-left: 20px;
@@ -237,4 +263,169 @@ input[name="search"]{
     margin: 0;
     margin-top: 50px;
     width: 100%;
+}
+.formAlt{
+    position: fixed;
+    top: 0;
+    transform: translate(-50%,0);
+    border-bottom-right-radius: 10%;
+    border-bottom-left-radius: 10%;
+}
+.radiosAlt{
+    flex-direction: row;
+}
+.radiosAlt .radioButton{
+    margin-left: 10px;
+    margin-top: 0;
+}
+
+
+
+.ispinner {
+    position: relative;
+    width: 20px;
+    height: 20px; }
+    .ispinner .ispinner-blade {
+      position: absolute;
+      top: 6.5px;
+      left: 8.5px;
+      width: 2.5px;
+      height: 6.5px;
+      background-color: #8e8e93;
+      border-radius: 1.25px;
+      animation: iSpinnerBlade 1s linear infinite;
+      will-change: opacity; }
+      .ispinner .ispinner-blade:nth-child(1) {
+        transform: rotate(45deg) translateY(-6.5px);
+        animation-delay: -1.625s; }
+      .ispinner .ispinner-blade:nth-child(2) {
+        transform: rotate(90deg) translateY(-6.5px);
+        animation-delay: -1.5s; }
+      .ispinner .ispinner-blade:nth-child(3) {
+        transform: rotate(135deg) translateY(-6.5px);
+        animation-delay: -1.375s; }
+      .ispinner .ispinner-blade:nth-child(4) {
+        transform: rotate(180deg) translateY(-6.5px);
+        animation-delay: -1.25s; }
+      .ispinner .ispinner-blade:nth-child(5) {
+        transform: rotate(225deg) translateY(-6.5px);
+        animation-delay: -1.125s; }
+      .ispinner .ispinner-blade:nth-child(6) {
+        transform: rotate(270deg) translateY(-6.5px);
+        animation-delay: -1s; }
+      .ispinner .ispinner-blade:nth-child(7) {
+        transform: rotate(315deg) translateY(-6.5px);
+        animation-delay: -0.875s; }
+      .ispinner .ispinner-blade:nth-child(8) {
+        transform: rotate(360deg) translateY(-6.5px);
+        animation-delay: -0.75s; }
+    .ispinner.ispinner-large {
+        position: absolute;
+        top: 50%;
+        width: 35px;
+        height: 35px;  
+        transform: translate(0,-50%);
+        display: none;
+     }
+      .ispinner.ispinner-large .ispinner-blade {
+        top: 11.5px;
+        left: 15px;
+        width: 5px;
+        height: 12px;
+        border-radius: 2.5px; }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(1) {
+          transform: rotate(45deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(2) {
+          transform: rotate(90deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(3) {
+          transform: rotate(135deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(4) {
+          transform: rotate(180deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(5) {
+          transform: rotate(225deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(6) {
+          transform: rotate(270deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(7) {
+          transform: rotate(315deg) translateY(-11.5px); }
+        .ispinner.ispinner-large .ispinner-blade:nth-child(8) {
+          transform: rotate(360deg) translateY(-11.5px); }
+  
+  @keyframes iSpinnerBlade {
+    0% {
+      opacity: 0.85; }
+    50% {
+      opacity: 0.25; }
+    100% {
+      opacity: 0.25; } }
+
+
+
+
+.actorCard{
+    width: 250px;
+    height: 430px;
+}
+.actorImg{
+    width: 100%;
+    height: 85%;
+    margin-top: 10px;
+}
+.actorDescr{
+    margin-top: 10px;
+}
+.actorCardAlt{
+    width: 80vw;
+    height: auto;
+}
+.actorBriefAlt{
+    width: 250px;
+    margin-left: 20px;
+    border: none;
+    box-shadow: none;
+    background: none;
+}
+.actorClose{
+    font-size: 30px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
+    display: none;
+    z-index: 100;
+}
+.actorCloseAlt{
+    display: block;
+}
+.actorDetailed{
+    display: none;
+    height: 97%;
+    position: relative;
+    color: white;
+    margin-left: 10px;
+}
+.actorDetailedActive{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 82%;
+    padding: 15px;
+}
+.actorMainFilmsItem{
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+}
+.actorMainFilmsImg{
+    width: 70%;
+    height: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }

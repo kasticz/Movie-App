@@ -9,11 +9,45 @@
     <title>Movie App</title>
 </head>
 <body>   
-    <div class="moviesWrapper"></div>
+    <div class="contentWrapper"></div>
     <form action="">
-        <input class="search" autofocus name="search" required placeholder="Введите название фильма/сериала/актера" type="text">
-        <button class="submit">Найти</button>
+        <div class="searchText">Я хочу найти</div>
+        <div class="radios">
+            <div class="radioButton">
+                <input required type="radio" id="searchMovies"
+                name="searchRadio" value="фильм, movie" >
+               <label for="searchMovies">Фильм</label>
+            </div>
+
+            <div class="radioButton">
+                <input required type="radio" id="searchTVShow"
+                name="searchRadio" value="сериал, tv">
+               <label for="searchTVShow">Сериал</label>
+            </div>
+
+            <div class="radioButton">
+                <input required type="radio" id="searchActor"
+                name="searchRadio" value="Актёр, Actor" >
+               <label for="searchActor"><span class="Actor">Актёра</span> </label>
+            </div>
+
+        </div>
+            <input class="search" autofocus name="search" required placeholder="Введите название фильма/сериала/актера" type="text">
+
+        <button class="submit">
+            <div class="ispinner ispinner-large">
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+                <div class="ispinner-blade"></div>
+              </div>Найти</button>
     </form>
+
+      
     <script src="./script.js"></script>
 </body>
 </html>
