@@ -14,16 +14,18 @@ let type;
 let toSearch;
 
 async function postData(e){
-    e.preventDefault()    
-    startLoad()
-
+    e.preventDefault() 
     let searchValue = searchInput.value
-
     getSearchType()
     if(toSearch === `Actor`){
         await getActors(searchValue)
         return;
-    }
+    }   
+    startLoad()
+
+    
+
+
 
     let moviesDetailedData = []
     let moviesCastData = []
@@ -34,6 +36,10 @@ async function postData(e){
 
     for(let i = 0; i < moviesDetailedData.length;i++){
         postMovie(moviesDetailedData[i],moviesCastData[i],recommendations[i])
+    }
+    let allCards = document.querySelectorAll(`.movieCard`)
+    for(let card of allCards){
+        card.style.display = `flex`
     }
 
     
@@ -151,8 +157,10 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         }else{
             movieDetailedActorsAvatar.src = `./placeholderAvatar.png`
         }
+        if(actor.character){
+            movieDetailedActorsCharacter.textContent = `as ${actor.character}`
+        }
         
-        movieDetailedActorsCharacter.textContent = `as ${actor.character}`
 
         movieDetailedActors.append(movieDetailedActorsName)
         movieDetailedActors.append(movieDetailedActorsAvatar)
@@ -162,6 +170,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
             let actorData = await (await fetch(`${APIURL}person/${actor.id}?api_key=${APIKEY}&language=en-US`)).json()
             let creditsData = await(await fetch(`https://api.themoviedb.org/3/person/${actorData.id}/combined_credits?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`)).json()
             let detailedCreditsData = creditsData.cast
+            detailedCreditsData = detailedCreditsData.filter(item => item.media_type === `movie`)
             detailedCreditsData.sort((a,b)=>{
                 return b.popularity - a.popularity;
             })
@@ -350,10 +359,10 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
 
     function makeTitle(){
         let title;
-        if(movieDetails.hasOwnProperty(`release_date`)){
+        if(movieDetails.release_date){
             title = `${movieDetails.title}(${movieDetails.release_date.slice(0,4)})`
         }
-        if(movieDetails.hasOwnProperty(`first_air_date`)){
+        if(movieDetails.first_air_date){
             title = `${movieDetails.name}(${movieDetails.first_air_date.slice(0,4)})`
         }
         movieTitle.textContent = title;
@@ -449,6 +458,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         if(fromRecommendations){
             fromRecommendationsAppend.append(movieCard)
             onMovieClick()       
+            movieCard.style.display = `flex`
             } else {
             contentWrapper.append(movieCard)
             movieCard.addEventListener(`click`,onMovieClick) 
@@ -460,12 +470,8 @@ form.addEventListener(`submit`,postData)
 
 
 
-
-
-
-
-getActors(`Hugh Calum Laurie`)
 async function  getActors(Actor){
+    startLoad()
     let actorsPreData = await (await fetch(`${APIURL}search/person?api_key=${APIKEY}&language=en-US&query=${Actor}&page=1&include_adult=false`)).json()
     let allActors = actorsPreData.results
     let actors = []
@@ -474,7 +480,6 @@ async function  getActors(Actor){
         actors.push([actorData,actor.known_for])
     }
     endLoad()
-    console.log(actors)
 
     actors.sort((a,b)=>{
        return b[0].popularity - a[0].popularity
@@ -482,16 +487,15 @@ async function  getActors(Actor){
 
     for(let i = 0; i < actors.length; i++){
         await postActor(actors[i])
+    } 
+    let allCards = document.querySelectorAll(`.actorCard`)
+    for(let card of allCards){
+        card.style.display = `flex`
     }
-
-
-
-    
 
     
 }
 async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
-    console.log(actor)
         let actorCard;
         let actorBrief;
         let actorName;
@@ -564,6 +568,10 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
             
 
             function getAge(){
+                console.log(actor[0])
+                if(actor[0].deathday){
+                    return `умер`
+                }
                 let now = new Date(Date.now())
                 let birthday = new Date(actor[0].birthday)
                 let birthdayThisYear = 1
@@ -638,8 +646,17 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
    
 
                     actorMainFilmsTitle.textContent = movie.title || movie.name
-                    actorMainFilmsImg.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
-                    actorMainFilmsCharacter.textContent = `as ` + await getCharacter()
+                    if(movie.backdrop_path){
+                        actorMainFilmsImg.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+                    }else{
+                        actorMainFilmsImg.src = `./placeholderMovie.png`
+                    }
+                    
+                    let character = await getCharacter()
+                    if(character){
+                        actorMainFilmsCharacter.textContent = `as ` + character
+                    }
+                    
 
                     actorMainFilmsItem.append(actorMainFilmsTitle)
                     actorMainFilmsItem.append(actorMainFilmsImg)
@@ -650,7 +667,12 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
                         let movieRecommendationsDetails = await (await fetch(`${APIURL}${movie.media_type}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`)).json()
                         let movieRecommendationsCast = await  (await fetch(`${APIURL}${movie.media_type}/${movie.id}/credits?api_key=${APIKEY}&language=en-US`)).json()
                         let movieRecommendationsRecommendations = await (await fetch(`${APIURL}${movie.media_type}/${movie.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`)).json()
-            
+
+                        if(movie.media_type === `movie`){
+                            type = `фильм`
+                        }else{
+                            type = `сериал`
+                        }
                         postMovie(movieRecommendationsDetails,movieRecommendationsCast.cast,movieRecommendationsRecommendations.results,true,actorCard)
 
                     })
@@ -740,6 +762,7 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
             if(fromRecommendations){
                 fromRecommendationsAppend.append(actorCard)
                 onActorClick()       
+                actorCard.style.display = `flex`
                 } else {
                 contentWrapper.append(actorCard)
                 actorCard.addEventListener(`click`,onActorClick) 
