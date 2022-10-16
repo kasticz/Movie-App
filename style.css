@@ -86,13 +86,16 @@ html{
 .movieClose{
     font-size: 30px;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
     color: white;
     margin-right: 10px;
     cursor: pointer;
     display: none;
     z-index: 100;
+}
+.movieClose:hover{
+    color:#140830
 }
 .movieCloseAlt{
     display: block;
@@ -108,6 +111,8 @@ html{
     justify-content: center;
     align-items: center;
     font-weight: 700;
+    height: 61px;
+    padding: 0 5px
 }
 .movieDescr,.actorDescr{
     width: 100%;
@@ -165,9 +170,13 @@ html{
     height: 100%;
     font-weight: 400;
     cursor: pointer;
+    padding: 10px;
+    border-radius: 16px;
+    transition: 0.5s all
 }
 .movieDetailedActors:hover{
-    background: #3e16a4
+    background: #3e16a4;
+    transform: scale(1.1)
 }
 .movieDetailedActorsAvatar{
     width: 6rem;
@@ -195,9 +204,12 @@ html{
     text-align: center;
     cursor: pointer;
     padding: 10px;
+    border-radius: 16px;
+    transition: 0.5s all;
 }
 .movieRecommendationsItem:hover{
-    background: #3e16a4
+    background: #3e16a4;
+    transform: scale(1.1)
 }
 .movieRecommendationsImg{
     width: 9rem;
@@ -233,6 +245,9 @@ form{
 .radioButton{
     margin-top: 10px;
 }
+.radioButton input{
+    transform: scale(1.7);
+}
 .searchText{
     font-size: 30px;    
 }
@@ -242,6 +257,7 @@ form{
     box-shadow: 3px 3px black;
     font-size: 20px;
     text-align: center;
+    border-radius: 10px
 }
 .search{
     height: 50px;
@@ -372,6 +388,7 @@ form{
 .actorImg{
     width: 100%;
     height: 85%;
+    min-height: 335px;
     margin-top: 10px;
 }
 .actorDescr{
@@ -398,6 +415,9 @@ form{
     cursor: pointer;
     display: none;
     z-index: 100;
+}
+.actorClose:hover{
+    color:#140830
 }
 .actorCloseAlt{
     display: block;
@@ -427,6 +447,13 @@ form{
     text-align: center;
     cursor: pointer;
     padding: 10px;
+    border-radius: 16px;
+    transition: 0.5s all
+}
+
+.actorMainFilmsItem:hover{
+    background: #3e16a4;
+    transform: scale(1.1);
 }
 .actorMainFilmsImg{
     width: 12rem;
@@ -436,4 +463,35 @@ form{
 }
 .actorDetailedMainFilmsWrapper{
     align-items: center;
+    margin-bottom: 30px;
+}
+
+.reference{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color:white;
+    display: flex;
+    align-items:center;
+    font-size: 14px;    
+}
+.reference a{
+    display: flex;
+    align-items:center;
+    margin-left: 5px;
+    color:white;
+    text-decoration: none;
+    cursor: pointer;
+}
+.reference a:hover{
+    text-decoration: underline;
+}
+
+.warning{
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translate(-50%,0);
+    font-size: 20px;
+    color: white
 }

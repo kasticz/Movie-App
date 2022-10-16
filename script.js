@@ -7,6 +7,7 @@ const searchActor = document.querySelector(`.Actor`)
 const radios = document.querySelector(`.radios`)
 const loadingSpinner = document.querySelector(`.ispinner`)
 const searchButton = document.querySelector(`.submit`)
+const warning = document.querySelector('.warning')
 
 const form = document.querySelector(`form`)
 
@@ -16,6 +17,7 @@ let toSearch;
 async function postData(e){
     e.preventDefault() 
     let searchValue = searchInput.value
+    warning.style.display = 'none'
     getSearchType()
     if(toSearch === `Actor`){
         await getActors(searchValue)
@@ -51,7 +53,7 @@ async function postData(e){
     async function getFetches(){
 
         let moviesData = await (await fetch(`${APIURL}search/${toSearch}?api_key=${APIKEY}&query=${searchValue}&language=en-US&include_adult=false`)).json()
-        let moviesList = moviesData.results
+        let moviesList = moviesData.results.filter(item => !!item.overview)
 
         for(movie of moviesList){
             let movieData =  await (await fetch(`${APIURL}${toSearch}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`)).json()
@@ -174,7 +176,6 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
             detailedCreditsData.sort((a,b)=>{
                 return b.popularity - a.popularity;
             })
-            console.log([[actorData,detailedCreditsData.slice(0,3)]])
             postActor([actorData,detailedCreditsData.slice(0,3)],true,movieCard)
         })
         
@@ -313,7 +314,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
     }   
         
     function makeRating(){
-        movieRating.textContent = movieDetails.vote_average * 10
+        movieRating.textContent = Math.round(movieDetails.vote_average * 10)
         let rating = movieRating.textContent;
         let movieRatingColor = `#f1070c`
         if(rating > 20) movieRatingColor = `#f04d45`  
@@ -343,7 +344,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
             }
 
         }else{
-            movieLengthText = `${movieDetails.number_of_episodes} episodes`
+            movieLengthText = `${movieDetails.number_of_episodes || 0} episodes`
         }
             
         movieLength.textContent = movieLengthText
@@ -358,7 +359,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
     }
 
     function makeTitle(){
-        let title;
+        let title = movieDetails?.title ? movieDetails.title : '' 
         if(movieDetails.release_date){
             title = `${movieDetails.title}(${movieDetails.release_date.slice(0,4)})`
         }
@@ -481,10 +482,11 @@ async function  getActors(Actor){
     }
     endLoad()
 
-    actors.sort((a,b)=>{
+
+    actors = actors.filter(item => !!item[0].biography || item[1].length > 1).sort((a,b)=>{
        return b[0].popularity - a[0].popularity
     })
-
+  
     for(let i = 0; i < actors.length; i++){
         await postActor(actors[i])
     } 
@@ -568,9 +570,8 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
             
 
             function getAge(){
-                console.log(actor[0])
                 if(actor[0].deathday){
-                    return `умер`
+                    return `умер(ла)`
                 }
                 let now = new Date(Date.now())
                 let birthday = new Date(actor[0].birthday)
@@ -726,7 +727,6 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
     
             function closeActor(e){
                 if(e.target === actor.querySelector(`.actorClose`) || !actor.contains(e.target)){
-                    console.log(1)
                     document.removeEventListener(`click`,closeActor)
                     actor.addEventListener(`click`,onActorClick)
                     if(e.target.closest(`.fromRecommendations`)){
