@@ -18,7 +18,7 @@ let toSearch;
 async function postData(e){
     e.preventDefault() 
     let searchValue = searchInput.value
-    // warning.style.display = 'none'
+
     getSearchType()
     if(toSearch === `Actor`){
         await getActors(searchValue)
