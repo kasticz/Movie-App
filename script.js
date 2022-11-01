@@ -1,4 +1,5 @@
-const APIURL = "https://api.themoviedb.org/3/"
+const APIURL = "https://qwedfgdfjhty.herokuapp.com/https://api.themoviedb.org/3/"
+const IMGAPIURL = 'https://qwedfgdfjhty.herokuapp.com/https://image.tmdb.org/t/p/original/'
 const APIKEY = "04c35731a5ee918f014970082a0088b1"
 const contentWrapper = document.querySelector(`.contentWrapper`)
 const searchInput = document.querySelector(`.search`)
@@ -155,7 +156,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         movieDetailedActorsName.textContent = actor.name
 
         if(actor.profile_path){
-            movieDetailedActorsAvatar.src = `https://image.tmdb.org/t/p/original${actor.profile_path}`
+            movieDetailedActorsAvatar.src = `${IMGAPIURL}${actor.profile_path}`
         }else{
             movieDetailedActorsAvatar.src = `./placeholderAvatar.png`
         }
@@ -170,7 +171,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         
         movieDetailedActors.addEventListener(`click`,async function(e){
             let actorData = await (await fetch(`${APIURL}person/${actor.id}?api_key=${APIKEY}&language=en-US`)).json()
-            let creditsData = await(await fetch(`https://api.themoviedb.org/3/person/${actorData.id}/combined_credits?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`)).json()
+            let creditsData = await(await fetch(`${APIURL}person/${actorData.id}/combined_credits?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`)).json()
             let detailedCreditsData = creditsData.cast
             detailedCreditsData = detailedCreditsData.filter(item => item.media_type === `movie`)
             detailedCreditsData.sort((a,b)=>{
@@ -199,7 +200,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         }
         movieRecommendationsTitle.textContent = recomTitle
         if(recommendation.backdrop_path){
-            movieRecommendationsImg.src = `https://image.tmdb.org/t/p/original${recommendation.backdrop_path}`
+            movieRecommendationsImg.src = `${IMGAPIURL}${recommendation.backdrop_path}`
         }else{
             movieRecommendationsImg.src = `./placeholderMovie.png`
         }
@@ -352,7 +353,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
 
     function makePoster(){
         if(movieDetails.poster_path){
-            movieImg.src = `https://image.tmdb.org/t/p/original${movieDetails.poster_path}`
+            movieImg.src = `${IMGAPIURL}${movieDetails.poster_path}`
         }else{
             movieImg.src = `./placeholderMovie.png`
         }
@@ -375,7 +376,7 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
             movieCompanyName.textContent = movieMainProd.name
             movieCompanyDescr.append(movieCompanyName)
             if(movieMainProd.logo_path){
-                movieCompanyLogo.src = `https://image.tmdb.org/t/p/original/${movieMainProd.logo_path}` 
+                movieCompanyLogo.src = `${IMGAPIURL}${movieMainProd.logo_path}` 
                 movieCompanyDescr.append(movieCompanyLogo)            
             }                 
         } 
@@ -563,7 +564,7 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
         function fillBrief(){
             actorName.textContent = actor[0].name
             if(actor[0].profile_path){
-                actorImg.src = `https://image.tmdb.org/t/p/original${actor[0].profile_path}`
+                actorImg.src = `${IMGAPIURL}${actor[0].profile_path}`
             }else{
                 actorImg.src = `./placeholderAvatar.png`
             }
@@ -648,7 +649,7 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
 
                     actorMainFilmsTitle.textContent = movie.title || movie.name
                     if(movie.backdrop_path){
-                        actorMainFilmsImg.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+                        actorMainFilmsImg.src = `${IMGAPIURL}${movie.backdrop_path}`
                     }else{
                         actorMainFilmsImg.src = `./placeholderMovie.png`
                     }
