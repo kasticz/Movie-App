@@ -8,7 +8,7 @@ const searchActor = document.querySelector(`.Actor`)
 const radios = document.querySelector(`.radios`)
 const loadingSpinner = document.querySelector(`.ispinner`)
 const searchButton = document.querySelector(`.submit`)
-const warning = document.querySelector('.warning')
+// const warning = document.querySelector('.warning')
 
 const form = document.querySelector(`form`)
 
@@ -18,7 +18,7 @@ let toSearch;
 async function postData(e){
     e.preventDefault() 
     let searchValue = searchInput.value
-    warning.style.display = 'none'
+    // warning.style.display = 'none'
     getSearchType()
     if(toSearch === `Actor`){
         await getActors(searchValue)
