@@ -1,5 +1,7 @@
-const APIURL = "https://qwedfgdfjhty.herokuapp.com/https://api.themoviedb.org/3/"
-const IMGAPIURL = 'https://qwedfgdfjhty.herokuapp.com/https://image.tmdb.org/t/p/original/'
+// const APIURL = "https://qwedfgdfjhty.herokuapp.com/https://api.themoviedb.org/3/"
+// const IMGAPIURL = 'https://qwedfgdfjhty.herokuapp.com/https://image.tmdb.org/t/p/original/'
+const APIURL = "https://api.codetabs.com/v1/proxy?quest=https://api.themoviedb.org/3/"
+const IMGAPIURL = 'https://api.codetabs.com/v1/proxy?quest=https://image.tmdb.org/t/p/original/'
 const APIKEY = "04c35731a5ee918f014970082a0088b1"
 const contentWrapper = document.querySelector(`.contentWrapper`)
 const searchInput = document.querySelector(`.search`)
