@@ -1,7 +1,7 @@
 // const APIURL = "https://qwedfgdfjhty.herokuapp.com/https://api.themoviedb.org/3/"
 // const IMGAPIURL = 'https://qwedfgdfjhty.herokuapp.com/https://image.tmdb.org/t/p/original/'
-const APIURL = "https://api.codetabs.com/v1/proxy?quest=https://api.themoviedb.org/3/"
-const IMGAPIURL = 'https://api.codetabs.com/v1/proxy?quest=https://image.tmdb.org/t/p/original/'
+const APIURL = "https://api.codetabs.com/v1/proxy/?quest=https://api.themoviedb.org/3/"
+const IMGAPIURL = 'https://api.codetabs.com/v1/proxy/?quest=https://image.tmdb.org/t/p/original/'
 const APIKEY = "04c35731a5ee918f014970082a0088b1"
 const contentWrapper = document.querySelector(`.contentWrapper`)
 const searchInput = document.querySelector(`.search`)
@@ -16,6 +16,7 @@ const form = document.querySelector(`form`)
 
 let type;
 let toSearch;
+let currAPILine;
 
 async function postData(e){
     e.preventDefault() 
@@ -55,17 +56,23 @@ async function postData(e){
 
     async function getFetches(){
 
-        let moviesData = await (await fetch(`${APIURL}search/${toSearch}?api_key=${APIKEY}&query=${searchValue}&language=en-US&include_adult=false`)).json()
+        currAPILine = `search/${toSearch}?api_key=${APIKEY}&query=${searchValue}&language=en-US&include_adult=false`
+
+        let moviesData = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+        console.log(moviesData)
         let moviesList = moviesData.results.filter(item => !!item.overview)
 
         for(movie of moviesList){
-            let movieData =  await (await fetch(`${APIURL}${toSearch}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`)).json()
+            currAPILine = `${toSearch}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`
+            let movieData =  await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
             moviesDetailedData.push(movieData)       
         }
         for(movie of moviesDetailedData){
-            let castData = await  (await fetch(`${APIURL}${toSearch}/${movie.id}/credits?api_key=${APIKEY}&language=en-US`)).json()
+            currAPILine = `${toSearch}/${movie.id}/credits?api_key=${APIKEY}&language=en-US`
+            let castData = await  (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
             moviesCastData.push(castData.cast)
-            let currRecommendations = await (await fetch(`${APIURL}${toSearch}/${movie.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`)).json()
+            currAPILine = `${toSearch}/${movie.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`
+            let currRecommendations = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
             recommendations.push(currRecommendations.results) 
         }
     }
@@ -172,8 +179,10 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
         movieDetailedActors.append(movieDetailedActorsCharacter) 
         
         movieDetailedActors.addEventListener(`click`,async function(e){
-            let actorData = await (await fetch(`${APIURL}person/${actor.id}?api_key=${APIKEY}&language=en-US`)).json()
-            let creditsData = await(await fetch(`${APIURL}person/${actorData.id}/combined_credits?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`)).json()
+            currAPILine = `person/${actor.id}?api_key=${APIKEY}&language=en-US`
+            let actorData = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+            currAPILine = `person/${actorData.id}/combined_credits?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`
+            let creditsData = await(await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
             let detailedCreditsData = creditsData.cast
             detailedCreditsData = detailedCreditsData.filter(item => item.media_type === `movie`)
             detailedCreditsData.sort((a,b)=>{
@@ -207,9 +216,12 @@ function postMovie(movieDetails,movieCast,movieRecommendations,fromRecommendatio
             movieRecommendationsImg.src = `./placeholderMovie.png`
         }
         movieRecommendationsItem.addEventListener(`click`,async function(e){
-            let movieRecommendationsDetails = await (await fetch(`${APIURL}${recommendation.media_type}/${recommendation.id}?api_key=${APIKEY}&language=en-US&include_adult=false`)).json()
-            let movieRecommendationsCast = await  (await fetch(`${APIURL}${recommendation.media_type}/${recommendation.id}/credits?api_key=${APIKEY}&language=en-US`)).json()
-            let movieRecommendationsRecommendations = await (await fetch(`${APIURL}${recommendation.media_type}/${recommendation.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`)).json()
+            currAPILine = `${recommendation.media_type}/${recommendation.id}?api_key=${APIKEY}&language=en-US&include_adult=false`
+            let movieRecommendationsDetails = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+            currAPILine = `${recommendation.media_type}/${recommendation.id}/credits?api_key=${APIKEY}&language=en-US`
+            let movieRecommendationsCast = await  (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+            currAPILine = `${recommendation.media_type}/${recommendation.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`
+            let movieRecommendationsRecommendations = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
 
             postMovie(movieRecommendationsDetails,movieRecommendationsCast.cast,movieRecommendationsRecommendations.results,true,movieCard)
         });
@@ -476,11 +488,13 @@ form.addEventListener(`submit`,postData)
 
 async function  getActors(Actor){
     startLoad()
-    let actorsPreData = await (await fetch(`${APIURL}search/person?api_key=${APIKEY}&language=en-US&query=${Actor}&page=1&include_adult=false`)).json()
+    currAPILine = `search/person?api_key=${APIKEY}&language=en-US&query=${Actor}&page=1&include_adult=false`
+    let actorsPreData = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
     let allActors = actorsPreData.results
     let actors = []
     for(let actor of allActors){
-        let actorData = await (await fetch(`${APIURL}person/${actor.id}?api_key=${APIKEY}&language=en-US`)).json()
+        currAPILine = `person/${actor.id}?api_key=${APIKEY}&language=en-US`
+        let actorData = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
         actors.push([actorData,actor.known_for])
     }
     endLoad()
@@ -668,9 +682,12 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
                     actorDetailedMainFilmsWrapper.append(actorMainFilmsItem)
 
                     actorMainFilmsItem.addEventListener(`click`,async function(e){
-                        let movieRecommendationsDetails = await (await fetch(`${APIURL}${movie.media_type}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`)).json()
-                        let movieRecommendationsCast = await  (await fetch(`${APIURL}${movie.media_type}/${movie.id}/credits?api_key=${APIKEY}&language=en-US`)).json()
-                        let movieRecommendationsRecommendations = await (await fetch(`${APIURL}${movie.media_type}/${movie.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`)).json()
+                        currAPILine = `${movie.media_type}/${movie.id}?api_key=${APIKEY}&language=en-US&include_adult=false`
+                        let movieRecommendationsDetails = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+                        currAPILine = `${movie.media_type}/${movie.id}/credits?api_key=${APIKEY}&language=en-US`
+                        let movieRecommendationsCast = await  (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
+                        currAPILine = `${movie.media_type}/${movie.id}/recommendations?api_key=${APIKEY}&language=en-US&page=1&include_adult=false`
+                        let movieRecommendationsRecommendations = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
 
                         if(movie.media_type === `movie`){
                             type = `фильм`
@@ -682,7 +699,8 @@ async function postActor(actor,fromRecommendations,fromRecommendationsAppend){
                     })
 
                     async function getCharacter(){
-                        let allCredits = await (await fetch(`${APIURL}/person/${actor[0].id}/combined_credits?api_key=${APIKEY}&language=en-US`)).json()
+                        currAPILine = `/person/${actor[0].id}/combined_credits?api_key=${APIKEY}&language=en-US`
+                        let allCredits = await (await fetch(`${APIURL}${encodeURIComponent(currAPILine)}`)).json()
                         let x = allCredits.cast          
                         for(let searchMovie of x ){                            
                             if(searchMovie.title === movie.title){                               
